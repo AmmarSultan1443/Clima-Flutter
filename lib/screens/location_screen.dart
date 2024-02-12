@@ -12,11 +12,24 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
 
+  int weatherId = 0;
+  int temp = 0;
+  String cityName = '';
+
   @override
   void initState() {
     super.initState();
 
-    print(widget.locationWeather);
+    updateUI(widget.locationWeather);
+  }
+  
+  void updateUI(dynamic weatherData) {
+
+    weatherId = weatherData['weather'][0]['id'];
+    double temperature = weatherData['main']['temp'];
+    temp = temperature.toInt();
+    cityName = weatherData['name'];
+    
   }
   @override
   Widget build(BuildContext context) {
@@ -60,7 +73,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '32°',
+                      '$temp°',
                       style: kTempTextStyle,
                     ),
                     Text(
@@ -73,7 +86,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "It's 🍦 time in San Francisco!",
+                  "It's 🍦 time in" + cityName,
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
@@ -85,7 +98,3 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 }
-
-// int weatherId = decodedData['weather'][0]['id'];
-// double temp = decodedData['main']['temp'];
-// String cityName = decodedData['name'];
