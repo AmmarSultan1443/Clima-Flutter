@@ -8,6 +8,7 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+
   void getLocation() async {
     Location location = Location();
     await location.getCurrentPosition();
@@ -19,8 +20,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   void getData() async {
     http.Response response = await http.get(Uri.parse(
-        'https://samples.openweathermap.org/data/2.5/weather?lat=37.785834&lon=-122.406417&appid=98d34afd5f368b1269fcf6f12b9fbffc'));
-    print(response.body);
+        'https://api.openweathermap.org/data/2.5/weather?lat=37.785834&lon=-122.406417&appid=98d34afd5f368b1269fcf6f12b9fbffc'));
+
+    if (response.statusCode == 200) {
+      String data = response.body;
+      print(data);
+    } else {
+      print(response.statusCode);
+    }
   }
 
   @override
