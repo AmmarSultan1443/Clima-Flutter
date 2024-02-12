@@ -1,6 +1,8 @@
 import 'package:clima/services/location.dart';
+import 'package:clima/services/networking.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
+const apiKey = '98d34afd5f368b1269fcf6f12b9fbffc';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -9,37 +11,30 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
 
-  void getLocation() async {
+  double latitude = 0.0;
+  double longitude = 0.0;
+
+  void getLocationData() async {
     Location location = Location();
     await location.getCurrentPosition();
-    print('latitude : ' +
-        location.latitude.toString() +
-        ' Longitude : ' +
-        location.longitude.toString());
-  }
 
-  void getData() async {
-    http.Response response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=37.785834&lon=-122.406417&appid=98d34afd5f368b1269fcf6f12b9fbffc'));
+    latitude = location.latitude;
+    longitude = location.longitude;
+    
+    NetworkHelper networkHelper = NetworkHelper('https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
 
-    if (response.statusCode == 200) {
-      String data = response.body;
-      print(data);
-    } else {
-      print(response.statusCode);
-    }
+    print(await networkHelper.getData());
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getLocation();
+    getLocationData();
   }
 
   @override
   Widget build(BuildContext context) {
-    getData();
     return Scaffold();
   }
 }
